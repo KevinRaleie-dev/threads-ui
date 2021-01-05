@@ -2,10 +2,11 @@
 module.exports = {
   mount: {
     /* ... */
+    // directory name: 'build directory'
+    public: '/',
+    src: '/dist',
   },
-  plugins: [
-    /* ... */
-  ],
+  plugins: ['@snowpack/plugin-react-refresh'],
   install: [
     /* ... */
   ],
