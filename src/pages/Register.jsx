@@ -1,4 +1,4 @@
-import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button } from '@chakra-ui/react';
+import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button, Checkbox } from '@chakra-ui/react';
 import React from 'react';
 import {useFormik} from 'formik';
 import { Layout } from '../shared/Layout';
@@ -10,8 +10,8 @@ export const Register = () => {
             email: '',
             password: ''
         },
-        onSubmit: () => {
-
+        onSubmit: (values) => {
+            console.log(values)
         }
     });
 
@@ -22,27 +22,47 @@ export const Register = () => {
                     Sign Up
                 </Heading>
                     <Text fontSize='sm' opacity={0.7} mt={3}>
-                        Setting up an e-commerce store has never been this easy,
-                        get started now 🔥
+                        To create your account we'll need to verify your email address. We'll never display this publicly.
                     </Text>
             </Container>
-            <Layout mw='600px'>
-                <form>
+            <Layout mw='600px' mt={3}>
+                <form onSubmit={formik.handleSubmit}>
                     <Stack spacing={3}>
                         <FormControl id="username">
                         <FormLabel>Username</FormLabel>
-                        <Input type="text" placeholder='Enter a username' />
+                        <Input 
+                        type="text" 
+                        placeholder='Enter a username'
+                        name='username'
+                        onChange={formik.handleChange}
+                        value={formik.values.username}
+                        />
                         <FormHelperText>This will be the name of your store.</FormHelperText>
                         </FormControl>
                         <FormControl id="email">
                         <FormLabel>Email address</FormLabel>
-                        <Input type="email" placeholder='Email address' />
+                        <Input 
+                        type="email" 
+                        placeholder='Email address'
+                        name='email'
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
+                        />
                         </FormControl>
                         <FormControl id="password">
                         <FormLabel>Password</FormLabel>
-                        <Input type="password" placeholder='Create a password' />
+                        <Input 
+                        type="password" 
+                        placeholder='Create a password'
+                        name='password'
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                        />
                         </FormControl>
-                        <Button type="submit" colorScheme='black' bg='black'>
+                        <Checkbox defaultIsChecked opacity={0.7}>
+                            I have read the Terms and Conditions
+                        </Checkbox>
+                        <Button type="submit" colorScheme='gray.700' bg='black' mt={2}>
                             Create Account
                         </Button>
                     </Stack>

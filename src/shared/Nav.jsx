@@ -4,7 +4,7 @@ import React from 'react'
 
 export const Nav = () => {
     return (
-    <Flex p={4}>
+    <Flex p={4} position='sticky' zIndex={1} top={0}>
         <Box p="2">
             <Heading size="md">
                 <Link to='/'>
@@ -16,12 +16,12 @@ export const Nav = () => {
         <Box>
             <Button colorScheme="black" bg='black' mr="4">
                 <Link to="/register">
-                    Sign Up
+                    Sign up
                 </Link>
             </Button>
             <Button colorScheme="teal" variant='ghost' color='black'>
                 <Link to='/login'>
-                    Log in
+                    Log In
                 </Link>
             </Button>
         </Box>
