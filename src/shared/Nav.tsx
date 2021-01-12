@@ -8,7 +8,7 @@ export const Nav = () => {
         <Box p="2">
             <Heading size="md">
                 <Link to='/'>
-                    Chakra app
+                    34 Threads
                 </Link>
             </Heading>
         </Box>
