@@ -2,8 +2,9 @@ import React from 'react'
 import { Box, Button, Text } from '@chakra-ui/react'
 import { Layout } from '../shared/Layout'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
+import type { RouteComponentProps } from 'react-router-dom'
 
-export const Home = () => {
+export const Home: React.FC<RouteComponentProps> = () => {
     return (
         <Layout mw='80%' mt='150px'>
             <Box

@@ -2,9 +2,11 @@ import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText
 import React from 'react';
 import {useFormik} from 'formik';
 import { Layout } from '../shared/Layout';
+import type { RouteComponentProps } from 'react-router-dom';
+import type { AuthFormProps } from '../interfaces/auth';
 
-export const Register = () => {
-    const formik = useFormik({
+export const Register: React.FC<RouteComponentProps> = () => {
+    const formik = useFormik<AuthFormProps>({
         initialValues: {
             username: '',
             email: '',
@@ -17,44 +19,43 @@ export const Register = () => {
 
     return (
         <>
-            <Container centerContent={true}>
+            <Container centerContent={true} mt={5}>
                 <Heading>
                     Sign Up
                 </Heading>
-                    <Text fontSize='sm' opacity={0.7} mt={3}>
-                        To create your account we'll need to verify your email address. We'll never display this publicly.
-                    </Text>
+                <Text fontSize='sm' opacity={0.7} mt={3} align='center'>
+                    To create your account we'll need to verify your email address.
+                </Text>
             </Container>
             <Layout mw='600px' mt={3}>
                 <form onSubmit={formik.handleSubmit}>
                     <Stack spacing={3}>
-                        <FormControl id="username">
-                        <FormLabel>Username</FormLabel>
-                        <Input 
-                        type="text" 
-                        placeholder='Enter a username'
-                        name='username'
-                        onChange={formik.handleChange}
-                        value={formik.values.username}
-                        />
-                        <FormHelperText>This will be the name of your store.</FormHelperText>
-                        </FormControl>
                         <FormControl id="email">
                         <FormLabel>Email address</FormLabel>
                         <Input 
                         type="email" 
-                        placeholder='Email address'
-                        name='email'
+                        placeholder="example@example.com"
+                        name="email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
+                        />
+                        <FormHelperText>We'll never share your email.</FormHelperText>
+                        </FormControl>
+                        <FormControl id="username">
+                        <FormLabel>Username</FormLabel>
+                        <Input 
+                        type="text" 
+                        placeholder="CJ"
+                        name="username"
+                        onChange={formik.handleChange}
+                        value={formik.values.username}
                         />
                         </FormControl>
                         <FormControl id="password">
                         <FormLabel>Password</FormLabel>
                         <Input 
                         type="password" 
-                        placeholder='Create a password'
-                        name='password'
+                        name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         />
