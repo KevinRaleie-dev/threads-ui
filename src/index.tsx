@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import { ChakraProvider } from '@chakra-ui/react';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './apolloClient';
 
 ReactDOM.render(
     <React.StrictMode>
-        <ChakraProvider>
-            <App />
-        </ChakraProvider>
+        <ApolloProvider client={client}>
+            <ChakraProvider>
+                <App />
+            </ChakraProvider>
+        </ApolloProvider>
     </React.StrictMode>
 , document.getElementById('root'));
 
