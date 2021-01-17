@@ -4,7 +4,7 @@ import React from 'react'
 
 export const Nav = () => {
     return (
-    <Flex p={4} position='sticky' zIndex={1} top={0}>
+    <Flex p={4} position='sticky' zIndex={1} top={0} backgroundColor='white' border='1px' borderBottomColor='gray.300'>
         <Box p="2">
             <Heading size="md">
                 <Link to='/'>
@@ -14,16 +14,16 @@ export const Nav = () => {
         </Box>
         <Spacer />
         <Box>
-            <Button colorScheme="black" bg='black' mr="4">
-                <Link to="/register">
-                    Sign up
-                </Link>
-            </Button>
-            <Button colorScheme="teal" variant='ghost' color='black'>
-                <Link to='/login'>
-                    Log In
-                </Link>
-            </Button>
+            <Link to="/register">
+                <Button colorScheme="black" bg='black' mr="4">
+                    Sign Up
+                </Button>
+            </Link>
+            <Link to='/login'>
+                <Button colorScheme="teal" variant='ghost' color='black'>
+                    Sign In         
+                </Button>
+            </Link>
         </Box>
     </Flex>
     )
