@@ -2,13 +2,14 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 
 interface Props {
-    children: React.ReactNode;
     mw?: string;
     bg?: string;
-    mt?: string | number
+    mt?: string | number;
+    children: React.ReactNode;
+    rest?: React.HTMLAttributes<{}>;
 }
 
-export const Layout = ({children, mw, bg, mt}: Props) => {
+export const Layout = ({children, mw, bg, mt, ...rest}: Props) => {
     return (
         <Box
         mt={8}
@@ -17,6 +18,7 @@ export const Layout = ({children, mw, bg, mt}: Props) => {
         marginTop={mt}
         mx='auto'
         width='100%'
+        {...rest}
         >
             {children}
         </Box>
