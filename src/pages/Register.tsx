@@ -12,8 +12,8 @@ export const Register: React.FC<RouteComponentProps> = () => {
             email: '',
             password: ''
         },
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: (values, actions) => {
+           console.log(values)
         }
     });
 
@@ -61,9 +61,11 @@ export const Register: React.FC<RouteComponentProps> = () => {
                         />
                         </FormControl>
                         <Checkbox defaultIsChecked opacity={0.7}>
-                            I have read the Terms and Conditions
+                            <Text fontSize='sm'>
+                                I have read the Terms and Conditions
+                            </Text>
                         </Checkbox>
-                        <Button type="submit" colorScheme='gray.700' bg='black' mt={2}>
+                        <Button disabled={formik.values.password === ''} type="submit" colorScheme='gray.700' bg='black' mt={2}>
                             Create Account
                         </Button>
                     </Stack>
