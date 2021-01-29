@@ -13,13 +13,14 @@ const errors = onError(({graphQLErrors, networkError}) => {
     }
 });
 
-const link = createHttpLink({
-    uri: "http://localhost:4000/graphql"
+const httplink = createHttpLink({
+    uri: "http://localhost:4000/graphql",
+    credentials: "include"
 })
 
 export const client = new ApolloClient({
-    link: errors.concat(link),
+    link: errors.concat(httplink),
     cache: new InMemoryCache(),
-    credentials: "include"
+    // credentials: "include"
 });
 
