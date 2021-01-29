@@ -3,33 +3,57 @@ import { Box, Button, Container, FormControl, FormLabel, Grid, Heading, Image, I
 import type { RouteComponentProps } from 'react-router-dom';
 import { useFormik } from 'formik';
 import type { AuthFormProps } from 'src/interfaces/auth';
+import { useLoginMutation, MeDocument } from '../generated/graphql';
+import { convertToObject } from '../utils/convert';
 
-export const Login: React.FC<RouteComponentProps> = () => {
+export const Login: React.FC<RouteComponentProps> = ({history}) => {
+    const BOX_HEIGHT = "92vh";
+
+    const [login] = useLoginMutation();
+
     const formik = useFormik<AuthFormProps>({
         initialValues: {
             email: '',
             password: ''
         },
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: async ({email, password}, actions) => {
+            const response = await login({
+                variables: {
+                    email,
+                    password
+                },
+                refetchQueries: [{query: MeDocument }]
+            });
+            console.log('res',response);
+            if (response.data?.login.errors) {
+                actions.setErrors(convertToObject(response.data.login.errors))
+            }
+            else if(response.data?.login.user) {
+
+                   console.log('logged in');
+                   actions.resetForm()
+            }
         }
     })
     return (
         <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-            <Box w="100%" h="95vh">
+            <Box w="100%" h={BOX_HEIGHT}>
                 <Image
-                src='/hoodie.jpg'
+                src='/glasses.jpg'
                 width='100%'
                 height='100%'
                 objectFit='cover'
-                alt='Girl in a hoodie'
+                alt='Girl with glasses'
                 />
             </Box>
-            <Box w="100%" h="95vh">
+            <Box w="100%" h={BOX_HEIGHT}>
                 <Container mt={10}>
-                    <Heading mt={3}>
+                    <Heading mt={3} align='center'>
                         Sign In
                     </Heading>
+                    <Text fontSize='sm' opacity={0.7} mt={3} align='center'>
+                        Find all your favorite items here, now.
+                    </Text>
                     <form onSubmit={formik.handleSubmit}>
                         <Stack spacing={3} mt={3}>
                             <FormControl id="email">
@@ -37,24 +61,27 @@ export const Login: React.FC<RouteComponentProps> = () => {
                                 <Input 
                                 type="email"     
                                 name="email"
-                                placeholder="example@example.com"
+                                placeholder="example@example.com*"
                                 onChange={formik.handleChange}
                                 value={formik.values.email}
                                 />
                             </FormControl>
+                            {formik.errors.email && formik.touched.email ? (<Text fontSize='sm' color="red.400">{formik.errors.email}</Text>) : null}
                             <FormControl id="password">
                                 <FormLabel>Password</FormLabel>
                                 <Input 
                                 type="password" 
                                 name="password"
+                                placeholder="Password*"
                                 onChange={formik.handleChange}
                                 value={formik.values.password}
                                 />
                             </FormControl>
+                            {formik.errors.password && formik.touched.password ? (<Text fontSize='sm' color="red.400">{formik.errors.password}</Text>) : null}
                             <Button type="submit" colorScheme='gray.700' bg='black'>
-                                Sign In
+                                Log In
                             </Button>
-                            <Text fontSize='sm' opacity={0.7} mt={3} align='center'>
+                            <Text _hover={{cursor: "pointer"}} fontSize='sm' opacity={0.7} mt={3} align='center'>
                                 Forgot Password?
                             </Text>
                         </Stack>
