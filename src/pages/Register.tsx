@@ -1,19 +1,39 @@
-import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button, Checkbox } from '@chakra-ui/react';
 import React from 'react';
+import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button, Checkbox, Spinner } from '@chakra-ui/react';
 import {useFormik} from 'formik';
 import { Layout } from '../shared/Layout';
 import type { RouteComponentProps } from 'react-router-dom';
 import type { AuthFormProps } from '../interfaces/auth';
+import { useRegisterMutation } from '../generated/graphql';
+import {convertToObject} from '../utils/convert';
+import { validationSchema } from '../utils/validation';
 
-export const Register: React.FC<RouteComponentProps> = () => {
+export const Register: React.FC<RouteComponentProps> = ({history}) => {
+
+    const [register] = useRegisterMutation();
+
     const formik = useFormik<AuthFormProps>({
         initialValues: {
             username: '',
             email: '',
             password: ''
         },
-        onSubmit: (values, actions) => {
-           console.log(values)
+        validationSchema,
+        onSubmit: async ({email, username, password}, actions) => {
+           const response = await register({
+               variables: {
+                   email,
+                   username: username!,
+                   password
+               }
+           });
+
+           if(response.data?.register.errors) {
+               actions.setErrors(convertToObject(response.data.register.errors));
+           }
+           else if(response.data?.register.user) {
+               history.push('/login');
+           }
         }
     });
 
@@ -41,6 +61,7 @@ export const Register: React.FC<RouteComponentProps> = () => {
                         />
                         <FormHelperText>We'll never share your email.</FormHelperText>
                         </FormControl>
+                        {formik.errors.email && formik.touched.email ? (<Text fontSize='sm' color="red.400">{formik.errors.email}</Text>) : null}
                         <FormControl id="username">
                         <FormLabel>Username</FormLabel>
                         <Input 
@@ -51,21 +72,24 @@ export const Register: React.FC<RouteComponentProps> = () => {
                         value={formik.values.username}
                         />
                         </FormControl>
+                        {formik.errors.username && formik.touched.username ? (<Text fontSize='sm' color="red.400">{formik.errors.username}</Text>) : null}
                         <FormControl id="password">
                         <FormLabel>Password</FormLabel>
                         <Input 
                         type="password" 
                         name="password"
+                        placeholder="Password*"
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         />
                         </FormControl>
-                        <Checkbox defaultIsChecked opacity={0.7}>
+                        {formik.errors.password && formik.touched.password ? (<Text fontSize='sm' color="red.400">{formik.errors.password}</Text>) : null}
+                        <Checkbox defaultChecked opacity={0.7}>
                             <Text fontSize='sm'>
-                                I have read the Terms and Conditions
+                                I have read the Terms of Use
                             </Text>
                         </Checkbox>
-                        <Button disabled={formik.values.password === ''} type="submit" colorScheme='gray.700' bg='black' mt={2}>
+                        <Button spinner={<Spinner size='sm' color="white" />} disabled={formik.values.password === ''} type="submit" colorScheme='gray.700' bg='black' mt={2}>
                             Create Account
                         </Button>
                     </Stack>
