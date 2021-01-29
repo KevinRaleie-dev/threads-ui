@@ -14,6 +14,7 @@
     "jsx": "preserve",
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "strict": true,
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
