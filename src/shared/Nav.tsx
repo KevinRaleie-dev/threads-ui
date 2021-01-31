@@ -1,10 +1,11 @@
-import { Flex, Box, Heading, Spacer, Button, Text } from '@chakra-ui/react'
-import {Link} from 'react-router-dom';
 import React from 'react'
+import { Flex, Box, Heading, Spacer, Button, Spinner } from '@chakra-ui/react'
+import { Link } from 'react-router-dom';
+import { NavMenu } from './NavMenu';
 import { useMeQuery } from '../generated/graphql';
 
 export const Nav = () => {
-    const {data, loading, error} = useMeQuery();
+    const {data, loading} = useMeQuery();
 
     console.log('me query',data?.me);
     return (
@@ -17,14 +18,16 @@ export const Nav = () => {
             </Heading>
         </Box>
         <Spacer />
-        {!loading && error ? (<>{error?.message}</>) : 
-        <Box>
+        {   
+            // !loading && error ? (<>{error?.message}</>)
+            loading ? <Spinner /> 
+            : 
+            <Box>
             {
                 data?.me ? (
-                    <>
-                        <Text>{data.me.username}</Text>
-                        <Button>Logout</Button>
-                    </>
+                    <Box>
+                       <NavMenu username={data.me.username} />
+                    </Box>
                 ) : (
                     <>
                         <Link to="/register">
@@ -39,9 +42,8 @@ export const Nav = () => {
                         </Link>
                     </>
                 )
-            }
-           
-        </Box>
+            } 
+            </Box>
         }
     </Flex>
     )
