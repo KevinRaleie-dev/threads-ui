@@ -30,8 +30,7 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
             }
             else if(response.data?.login.user) {
 
-                   console.log('logged in');
-                   actions.resetForm()
+                history.push('/browse');
             }
         }
     })
