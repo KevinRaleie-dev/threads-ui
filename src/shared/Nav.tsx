@@ -7,19 +7,17 @@ import { useMeQuery } from '../generated/graphql';
 export const Nav = () => {
     const {data, loading} = useMeQuery();
 
-    console.log('me query',data?.me);
     return (
     <Flex p={4} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
         <Box p="2">
             <Heading size="md">
-                <Link to='/'>
+                <Link to={data?.me ? '/browse' : '/'}>
                     34 Threads
                 </Link>
             </Heading>
         </Box>
         <Spacer />
         {   
-            // !loading && error ? (<>{error?.message}</>)
             loading ? <Spinner /> 
             : 
             <Box>
