@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { useHistory } from 'react-router-dom';
-import { MeDocument, MeQuery, useLogoutMutation } from '../generated/graphql';
-
+import { MeDocument, useLogoutMutation } from '../generated/graphql';
 interface Props {
     username: string;
 }
@@ -22,23 +21,8 @@ export const NavMenu = ({username}: Props) => {
                 refetchQueries: [{
                     query: MeDocument
                 }]
-                // update: (cache, {data}) => {
-
-                //     const userData = cache.readQuery<MeQuery>({
-                //         query: MeDocument
-                //     });
-
-                //     cache.writeQuery<MeQuery>({
-                //         query: MeDocument,
-                //         data: {
-                //             me: [userData?.me, data?.logout],
-                //         }
-                //     })
-
-                // }
             });
-
-            // navigate to the login page
+            
             history.push('/login');
 
         } catch (error) {

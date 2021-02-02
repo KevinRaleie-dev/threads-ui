@@ -8,7 +8,7 @@ export const Nav = () => {
     const {data, loading} = useMeQuery();
 
     return (
-    <Flex p={4} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
+    <Flex p={3} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
         <Box p="2">
             <Heading size="md">
                 <Link to={data?.me ? '/browse' : '/'}>

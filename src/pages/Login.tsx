@@ -24,7 +24,6 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
                 },
                 refetchQueries: [{query: MeDocument }]
             });
-            console.log('res',response);
             if (response.data?.login.errors) {
                 actions.setErrors(convertToObject(response.data.login.errors))
             }
