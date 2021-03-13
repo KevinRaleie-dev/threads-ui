@@ -1,0 +1,7 @@
+query FindByUsername($username: String!) {
+    getUserByUsername(username: $username) {
+        id
+        email
+        username
+    }
+}

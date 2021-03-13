@@ -19,6 +19,12 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   me?: Maybe<User>;
+  getUserByUsername?: Maybe<User>;
+};
+
+
+export type QueryGetUserByUsernameArgs = {
+  username: Scalars['String'];
 };
 
 export type User = {
@@ -37,6 +43,7 @@ export type Mutation = {
   register: AuthResponse;
   login: AuthResponse;
   logout: Scalars['Boolean'];
+  updateUserImage: Scalars['Boolean'];
 };
 
 
@@ -47,6 +54,11 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   data: LoginUserInput;
+};
+
+
+export type MutationUpdateUserImageArgs = {
+  imgUrl: Scalars['String'];
 };
 
 /** Return an object of either errors or user when authenticating */
@@ -122,6 +134,19 @@ export type RegisterMutation = (
       & Pick<User, 'username'>
     )> }
   ) }
+);
+
+export type FindByUsernameQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type FindByUsernameQuery = (
+  { __typename?: 'Query' }
+  & { getUserByUsername?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'username'>
+  )> }
 );
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
@@ -252,6 +277,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const FindByUsernameDocument = gql`
+    query FindByUsername($username: String!) {
+  getUserByUsername(username: $username) {
+    id
+    email
+    username
+  }
+}
+    `;
+
+/**
+ * __useFindByUsernameQuery__
+ *
+ * To run a query within a React component, call `useFindByUsernameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindByUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindByUsernameQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useFindByUsernameQuery(baseOptions: Apollo.QueryHookOptions<FindByUsernameQuery, FindByUsernameQueryVariables>) {
+        return Apollo.useQuery<FindByUsernameQuery, FindByUsernameQueryVariables>(FindByUsernameDocument, baseOptions);
+      }
+export function useFindByUsernameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindByUsernameQuery, FindByUsernameQueryVariables>) {
+          return Apollo.useLazyQuery<FindByUsernameQuery, FindByUsernameQueryVariables>(FindByUsernameDocument, baseOptions);
+        }
+export type FindByUsernameQueryHookResult = ReturnType<typeof useFindByUsernameQuery>;
+export type FindByUsernameLazyQueryHookResult = ReturnType<typeof useFindByUsernameLazyQuery>;
+export type FindByUsernameQueryResult = Apollo.QueryResult<FindByUsernameQuery, FindByUsernameQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello

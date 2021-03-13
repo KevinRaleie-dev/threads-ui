@@ -11,9 +11,9 @@ export const Nav = () => {
     return (
     <Flex p={3} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
         <Box p="2">
-            <Heading size="md" bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+            <Heading size="md">
                 <Link to={data?.me ? '/browse' : '/'}>
-                    34 Threads
+                    #Threads
                 </Link>
             </Heading>
         </Box>
@@ -37,16 +37,19 @@ export const Nav = () => {
                     </Box>
                 ) : (
                     <>
-                        <Link to="/register">
-                        <Button colorScheme="black" bg='black' mr="4">
-                            Sign Up
-                        </Button>
-                        </Link>
-                        <Link to='/login'>
-                            <Button colorScheme="teal" variant='ghost' color='black'>
-                                Sign In         
-                            </Button>
-                        </Link>
+                        { loading ? <Spinner /> : <>
+                                <Link to="/register">
+                                <Button colorScheme="black" bg='black' mr="4">
+                                    Sign Up
+                                </Button>
+                                </Link>
+                                <Link to='/login'>
+                                    <Button colorScheme="teal" variant='ghost' color='black'>
+                                        Sign In         
+                                    </Button>
+                                </Link> 
+                            </>
+                        }
                     </>
                 )
             } 

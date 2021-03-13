@@ -28,20 +28,20 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
                 actions.setErrors(convertToObject(response.data.login.errors))
             }
             else if(response.data?.login.user) {
-
                 history.push('/browse');
             }
         }
-    })
+    });
+    
     return (
         <Grid templateColumns="repeat(2, 1fr)" gap={1}>
             <Box w="100%" h={BOX_HEIGHT}>
                 <Image
-                src='/glasses.jpg'
+                src='/afwoman.jpg'
                 width='100%'
                 height='100%'
                 objectFit='cover'
-                alt='Girl with glasses'
+                alt='woman with head scarf and beads'
                 />
             </Box>
             <Box w="100%" h={BOX_HEIGHT}>
@@ -56,7 +56,8 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
                         <Stack spacing={3} mt={3}>
                             <FormControl id="email">
                                 <FormLabel>Email address</FormLabel>
-                                <Input 
+                                <Input
+                                focusBorderColor="black" 
                                 type="email"     
                                 name="email"
                                 placeholder="example@example.com*"
@@ -67,7 +68,8 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
                             {formik.errors.email && formik.touched.email ? (<Text fontSize='sm' color="red.400">{formik.errors.email}</Text>) : null}
                             <FormControl id="password">
                                 <FormLabel>Password</FormLabel>
-                                <Input 
+                                <Input
+                                focusBorderColor="black"  
                                 type="password" 
                                 name="password"
                                 placeholder="Password*"

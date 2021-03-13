@@ -52,7 +52,8 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                     <Stack spacing={3}>
                         <FormControl id="email">
                         <FormLabel>Email address</FormLabel>
-                        <Input 
+                        <Input
+                        focusBorderColor="black" 
                         type="email" 
                         placeholder="example@example.com"
                         name="email"
@@ -65,6 +66,7 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                         <FormControl id="username">
                         <FormLabel>Username</FormLabel>
                         <Input 
+                        focusBorderColor="black" 
                         type="text" 
                         placeholder="CJ"
                         name="username"
@@ -75,7 +77,8 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                         {formik.errors.username && formik.touched.username ? (<Text fontSize='sm' color="red.400">{formik.errors.username}</Text>) : null}
                         <FormControl id="password">
                         <FormLabel>Password</FormLabel>
-                        <Input 
+                        <Input
+                        focusBorderColor="black"  
                         type="password" 
                         name="password"
                         placeholder="Password*"
@@ -89,7 +92,7 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                                 I have read the Terms of Use
                             </Text>
                         </Checkbox>
-                        <Button spinner={<Spinner size='sm' color="white" />} disabled={formik.values.password === ''} type="submit" colorScheme='gray.700' bg='black' mt={2}>
+                        <Button spinner={<Spinner size='sm' color="white" />} disabled={formik.values.password.length < 6} type="submit" colorScheme='gray.700' bg='black' mt={2}>
                             Create Account
                         </Button>
                     </Stack>

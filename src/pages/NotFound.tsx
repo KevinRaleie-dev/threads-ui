@@ -21,6 +21,7 @@ export const NotFound = () => {
             justifyContent="center"
             alignItems="center"
             >
+                {/* TODO: link to the previous page the user was on */}
                 <Link to='/browse'>
                     <Button _hover={{color:'black', background: 'white', border: '2px', borderColor:'black' }} mt={5} colorScheme='black' bg='#020202'>
                             Take me home

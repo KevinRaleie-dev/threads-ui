@@ -5,7 +5,7 @@ import { ArrowForwardIcon } from '@chakra-ui/icons'
 import type { RouteComponentProps } from 'react-router-dom';
 import {withRouter} from 'react-router-dom'
 
-const Home: React.FC<RouteComponentProps> = () => {
+const Home: React.FC<RouteComponentProps> = ({history}) => {
     return (
         <Layout mw='80%' mt='150px'>
             <Box
@@ -18,10 +18,12 @@ const Home: React.FC<RouteComponentProps> = () => {
                     Buy. Sell. Discover unique South African fashion.
                 </Text>
                 <Text fontSize='xl'>
-                    Sneakers. Designer. Vintage. Streetwear. Traditional. Whatever your style. Find it on here!
+                    From African attire to Streetwear. Indie designer brands. Vintage. Traditional. Whatever your style. Find it here!
                 </Text>
-                <Button _hover={{color:'black', background: 'white', border: '2px', borderColor:'black' }} mt={5} colorScheme='black' bg='#020202' rightIcon={<ArrowForwardIcon />}>
-                    Get started
+                <Button _hover={{color:'black', background: 'white', border: '2px', borderColor:'black' }} mt={5} colorScheme='black' bg='#020202' rightIcon={<ArrowForwardIcon />} onClick={() => {
+                    history.push('/browse')
+                }}>
+                    Start browsing
                 </Button>
             </Box>
         </Layout>
