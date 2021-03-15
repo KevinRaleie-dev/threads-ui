@@ -1,0 +1,15 @@
+mutation CreateItem($name: String!, $description: String!, $price: Float!, $quantity: Int!, $imageurl: String!) {
+  createItem(data: {
+    name: $name,
+    description: $description,
+    price: $price,
+    quantity: $quantity,
+    imageurl: $imageurl
+  }) {
+    user {
+      email
+      username
+    }
+    id
+  }
+}

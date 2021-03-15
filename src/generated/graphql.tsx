@@ -20,6 +20,9 @@ export type Query = {
   hello: Scalars['String'];
   me?: Maybe<User>;
   getUserByUsername?: Maybe<User>;
+  getStores: Array<Store>;
+  getStorebyId?: Maybe<Store>;
+  fetchItems: Array<Item>;
 };
 
 
@@ -27,16 +30,46 @@ export type QueryGetUserByUsernameArgs = {
   username: Scalars['String'];
 };
 
+
+export type QueryGetStorebyIdArgs = {
+  id: Scalars['Float'];
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   username: Scalars['String'];
   email: Scalars['String'];
+  items: Array<Item>;
   imageUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
+export type Item = {
+  __typename?: 'Item';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  imageurl: Scalars['String'];
+  description: Scalars['String'];
+  quantity: Scalars['Int'];
+  user: User;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+
+export type Store = {
+  __typename?: 'Store';
+  id: Scalars['ID'];
+  nameOfStore: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  deliveryTime: Scalars['String'];
+  storeDescription: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -44,6 +77,8 @@ export type Mutation = {
   login: AuthResponse;
   logout: Scalars['Boolean'];
   updateUserImage: Scalars['Boolean'];
+  createStore: StoreResponse;
+  createItem: Item;
 };
 
 
@@ -59,6 +94,16 @@ export type MutationLoginArgs = {
 
 export type MutationUpdateUserImageArgs = {
   imgUrl: Scalars['String'];
+};
+
+
+export type MutationCreateStoreArgs = {
+  data: StoreInputData;
+};
+
+
+export type MutationCreateItemArgs = {
+  data: ItemInput;
 };
 
 /** Return an object of either errors or user when authenticating */
@@ -86,6 +131,48 @@ export type LoginUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type StoreResponse = {
+  __typename?: 'StoreResponse';
+  errors?: Maybe<Array<FieldError>>;
+  store?: Maybe<Store>;
+};
+
+export type StoreInputData = {
+  nameOfStore: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  storeDescription: Scalars['String'];
+  deliveryTime: Scalars['String'];
+};
+
+export type ItemInput = {
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  imageurl: Scalars['String'];
+  description: Scalars['String'];
+  quantity: Scalars['Int'];
+};
+
+export type CreateItemMutationVariables = Exact<{
+  name: Scalars['String'];
+  description: Scalars['String'];
+  price: Scalars['Float'];
+  quantity: Scalars['Int'];
+  imageurl: Scalars['String'];
+}>;
+
+
+export type CreateItemMutation = (
+  { __typename?: 'Mutation' }
+  & { createItem: (
+    { __typename?: 'Item' }
+    & Pick<Item, 'id'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'email' | 'username'>
+    ) }
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -136,6 +223,21 @@ export type RegisterMutation = (
   ) }
 );
 
+export type FetchItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchItemsQuery = (
+  { __typename?: 'Query' }
+  & { fetchItems: Array<(
+    { __typename?: 'Item' }
+    & Pick<Item, 'id' | 'imageurl' | 'price' | 'description'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
+  )> }
+);
+
 export type FindByUsernameQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -146,6 +248,10 @@ export type FindByUsernameQuery = (
   & { getUserByUsername?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'email' | 'username'>
+    & { items: Array<(
+      { __typename?: 'Item' }
+      & Pick<Item, 'id' | 'imageurl' | 'price'>
+    )> }
   )> }
 );
 
@@ -164,11 +270,57 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email'>
+    & Pick<User, 'id' | 'email' | 'username'>
+    & { items: Array<(
+      { __typename?: 'Item' }
+      & Pick<Item, 'id' | 'name' | 'imageurl' | 'price'>
+    )> }
   )> }
 );
 
 
+export const CreateItemDocument = gql`
+    mutation CreateItem($name: String!, $description: String!, $price: Float!, $quantity: Int!, $imageurl: String!) {
+  createItem(
+    data: {name: $name, description: $description, price: $price, quantity: $quantity, imageurl: $imageurl}
+  ) {
+    user {
+      email
+      username
+    }
+    id
+  }
+}
+    `;
+export type CreateItemMutationFn = Apollo.MutationFunction<CreateItemMutation, CreateItemMutationVariables>;
+
+/**
+ * __useCreateItemMutation__
+ *
+ * To run a mutation, you first call `useCreateItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createItemMutation, { data, loading, error }] = useCreateItemMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *      price: // value for 'price'
+ *      quantity: // value for 'quantity'
+ *      imageurl: // value for 'imageurl'
+ *   },
+ * });
+ */
+export function useCreateItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateItemMutation, CreateItemMutationVariables>) {
+        return Apollo.useMutation<CreateItemMutation, CreateItemMutationVariables>(CreateItemDocument, baseOptions);
+      }
+export type CreateItemMutationHookResult = ReturnType<typeof useCreateItemMutation>;
+export type CreateItemMutationResult = Apollo.MutationResult<CreateItemMutation>;
+export type CreateItemMutationOptions = Apollo.BaseMutationOptions<CreateItemMutation, CreateItemMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(data: {email: $email, password: $password}) {
@@ -277,12 +429,55 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const FetchItemsDocument = gql`
+    query FetchItems {
+  fetchItems {
+    user {
+      username
+    }
+    id
+    imageurl
+    price
+    description
+  }
+}
+    `;
+
+/**
+ * __useFetchItemsQuery__
+ *
+ * To run a query within a React component, call `useFetchItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchItemsQuery(baseOptions?: Apollo.QueryHookOptions<FetchItemsQuery, FetchItemsQueryVariables>) {
+        return Apollo.useQuery<FetchItemsQuery, FetchItemsQueryVariables>(FetchItemsDocument, baseOptions);
+      }
+export function useFetchItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchItemsQuery, FetchItemsQueryVariables>) {
+          return Apollo.useLazyQuery<FetchItemsQuery, FetchItemsQueryVariables>(FetchItemsDocument, baseOptions);
+        }
+export type FetchItemsQueryHookResult = ReturnType<typeof useFetchItemsQuery>;
+export type FetchItemsLazyQueryHookResult = ReturnType<typeof useFetchItemsLazyQuery>;
+export type FetchItemsQueryResult = Apollo.QueryResult<FetchItemsQuery, FetchItemsQueryVariables>;
 export const FindByUsernameDocument = gql`
     query FindByUsername($username: String!) {
   getUserByUsername(username: $username) {
     id
     email
     username
+    items {
+      id
+      imageurl
+      price
+    }
   }
 }
     `;
@@ -346,8 +541,14 @@ export const MeDocument = gql`
     query Me {
   me {
     id
-    username
     email
+    username
+    items {
+      id
+      name
+      imageurl
+      price
+    }
   }
 }
     `;

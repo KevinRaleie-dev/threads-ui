@@ -1,0 +1,11 @@
+query FetchItems {
+  fetchItems {
+    user {
+      username
+    }
+    id
+    imageurl
+    price
+    description
+  }
+}

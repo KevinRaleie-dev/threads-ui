@@ -3,5 +3,10 @@ query FindByUsername($username: String!) {
         id
         email
         username
+        items {
+            id
+            imageurl
+            price
+        }
     }
 }

@@ -68,11 +68,12 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                         <Input 
                         focusBorderColor="black" 
                         type="text" 
-                        placeholder="CJ"
+                        placeholder="cj's store"
                         name="username"
                         onChange={formik.handleChange}
                         value={formik.values.username}
                         />
+                        <FormHelperText>This will be the name of your store.</FormHelperText>
                         </FormControl>
                         {formik.errors.username && formik.touched.username ? (<Text fontSize='sm' color="red.400">{formik.errors.username}</Text>) : null}
                         <FormControl id="password">
@@ -81,7 +82,7 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                         focusBorderColor="black"  
                         type="password" 
                         name="password"
-                        placeholder="Password*"
+                        placeholder="***"
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         />

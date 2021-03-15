@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Box, Heading, Spacer, Button, Spinner, Text } from '@chakra-ui/react'
+import { Flex, Box, Heading, Spacer, Button, Spinner } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
 import { NavMenu } from './NavMenu';
 import { useMeQuery } from '../generated/graphql';
@@ -32,7 +32,6 @@ export const Nav = () => {
                     alignItems='center'
                     justifyContent='space-between'
                     >
-                        <Text fontWeight="500" mr={2}>Sell Item</Text>
                         <NavMenu username={data.me.username} />
                     </Box>
                 ) : (
