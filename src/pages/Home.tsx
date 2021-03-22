@@ -32,7 +32,7 @@ const Home: React.FC<RouteComponentProps> = ({history}) => {
                         Find your style.
                     </Text>
                     <Text my={10} fontSize='xl'>
-                        Discover indie designers and brands doing tings and the creators behind them, whatever you are into
+                        Discover indie designers and brands doing things and the creators behind them, whatever you are into
                         find the seller for you.
                     </Text>
                     <Button colorScheme='black' bg='#020202' onClick={() => {
