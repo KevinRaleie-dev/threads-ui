@@ -1,21 +1,20 @@
 import React from 'react'
-import { Flex, Box, Heading, Spacer, Button, Spinner } from '@chakra-ui/react'
+import { Flex, Box, Spacer, Button, Spinner } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
 import { NavMenu } from './NavMenu';
 import { useMeQuery } from '../generated/graphql';
 import { Search } from './Search';
+import { Logo } from './Logo';
 
 export const Nav = () => {
     const {data, loading} = useMeQuery();
 
     return (
-    <Flex p={3} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
-        <Box p="2">
-            <Heading size="md">
-                <Link to={data?.me ? '/browse' : '/'}>
-                    #Threads
-                </Link>
-            </Heading>
+    <Flex py={2} px={5} position='sticky' zIndex={1} top={0} backgroundColor='white' borderBottom='1px' borderBottomColor='gray.300'>
+        <Box>
+            <Link to={data?.me ? '/browse' : '/'}>
+                <Logo />
+            </Link>
         </Box>
             <>
                 { data?.me ? <Search /> : <Spacer /> }
@@ -37,16 +36,16 @@ export const Nav = () => {
                 ) : (
                     <>
                         { loading ? <Spinner /> : <>
-                                <Link to="/register">
-                                <Button colorScheme="black" bg='black' mr="4">
-                                    Sign Up
-                                </Button>
-                                </Link>
                                 <Link to='/login'>
-                                    <Button colorScheme="teal" variant='ghost' color='black'>
-                                        Sign In         
+                                    <Button _hover={{ border: '2px', borderColor: 'black'}} colorScheme="teal" border='2px' variant='outline' borderColor='gray.100' color='black' mr="4">
+                                        Log in         
                                     </Button>
                                 </Link> 
+                                <Link to="/register">
+                                <Button colorScheme="black" bg='black'>
+                                    Sign up
+                                </Button>
+                                </Link>
                             </>
                         }
                     </>
