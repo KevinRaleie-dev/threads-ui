@@ -11,3 +11,8 @@ export const convertToObject = (array: FieldError[]) => {
     return value;
 
 }
+
+export const replaceDashWithSpace = (s: string | undefined): string | undefined => {
+    const param = s?.replaceAll("-", " ");
+    return param;
+}

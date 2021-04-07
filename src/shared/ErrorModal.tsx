@@ -19,7 +19,6 @@ export const ErrorModal: React.FC<Props> = ({error}) => {
                     <Text mb={3}>If you received this error, please try refreshing the page. And if the problem persists
                         contact us <span><a href='#'>here</a></span>
                     </Text>
-
                 </ModalBody>
                 </ModalContent>
             </Modal>  

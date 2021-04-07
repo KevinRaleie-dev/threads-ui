@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button, Checkbox, Spinner } from '@chakra-ui/react';
+import React, { useRef } from 'react';
+import { Container, Heading, Text, FormControl, FormLabel, Input, FormHelperText, Stack, Button, Checkbox, useToast, Box } from '@chakra-ui/react';
 import {useFormik} from 'formik';
 import { Layout } from '../shared/Layout';
 import type { RouteComponentProps } from 'react-router-dom';
@@ -9,8 +9,35 @@ import {convertToObject} from '../utils/convert';
 import { validationSchema } from '../utils/validation';
 
 export const Register: React.FC<RouteComponentProps> = ({history}) => {
-
     const [register] = useRegisterMutation();
+    const toast = useToast();
+    let displayError = useRef('');
+
+    const handleSuccess = (): void => {
+        toast({
+            title: "Account created.",
+            description: "We have created your account",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+        });
+    }
+
+    const handleError = (error: string): void => {
+        toast({
+            position: "bottom-left",
+            render: () => (
+                <Box
+                color="white"
+                bg="#1e1e1e"
+                p={3}
+                borderRadius={8}
+                >
+                    {error}
+                </Box>
+            )
+        })
+    }
 
     const formik = useFormik<AuthFormProps>({
         initialValues: {
@@ -20,20 +47,28 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
         },
         validationSchema,
         onSubmit: async ({email, username, password}, actions) => {
-           const response = await register({
-               variables: {
-                   email,
-                   username: username!,
-                   password
-               }
-           });
-
-           if(response.data?.register.errors) {
-               actions.setErrors(convertToObject(response.data.register.errors));
-           }
-           else if(response.data?.register.user) {
-               history.push('/login');
-           }
+            try {
+                const response = await register({
+                    variables: {
+                        email,
+                        username: username!,
+                        password
+                    }
+                });
+     
+                if(response.data?.register.errors) {
+                    actions.setErrors(convertToObject(response.data.register.errors));
+                }
+                else if(response.data?.register.user) {
+                    handleSuccess();
+                    history.push('/login');
+                }
+                
+            } catch (error) {
+                displayError.current = error.message;
+                handleError(displayError.current);
+                
+            }
         }
     });
 
@@ -93,7 +128,12 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
                                 I have read the Terms of Use
                             </Text>
                         </Checkbox>
-                        <Button spinner={<Spinner size='sm' color="white" />} disabled={formik.values.password.length < 6} type="submit" colorScheme='gray.700' bg='black' mt={2}>
+                        <Button 
+                        isLoading={formik.isSubmitting} 
+                        type="submit" 
+                        colorScheme='gray.700' 
+                        bg='black' 
+                        mt={2}>
                             Create Account
                         </Button>
                     </Stack>

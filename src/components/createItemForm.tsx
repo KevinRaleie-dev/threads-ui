@@ -33,8 +33,8 @@ export const CreateItemForm = () => {
 
     return (
         <>
-          <Button _hover={{color:'black', background: 'white', border: '2px', borderColor:'black' }} colorScheme='black' bg='#020202' onClick={onOpen}>
-            Add item
+          <Button colorScheme='black' bg='#020202' onClick={onOpen}>
+            New item
             </Button>
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />

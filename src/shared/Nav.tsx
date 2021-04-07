@@ -37,7 +37,12 @@ export const Nav = () => {
                     <>
                         { loading ? <Spinner /> : <>
                                 <Link to='/login'>
-                                    <Button _hover={{ border: '2px', borderColor: 'black'}} colorScheme="teal" border='2px' variant='outline' borderColor='gray.100' color='black' mr="4">
+                                    <Button _hover={{ border: '2px', borderColor: 'black'}} 
+                                    colorScheme="teal" 
+                                    border='2px' 
+                                    variant='outline' 
+                                    borderColor='gray.100' 
+                                    color='black' mr="4">
                                         Log in         
                                     </Button>
                                 </Link> 

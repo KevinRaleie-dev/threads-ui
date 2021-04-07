@@ -1,9 +1,13 @@
-import { Box, Stack, Text, Tabs, TabList, Tab, TabPanel, TabPanels, Image, Grid } from '@chakra-ui/react';
+import { Box, Stack, Text, Skeleton, Button } from '@chakra-ui/react';
 import React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { useParams } from "react-router-dom";
-import { CreateItemForm } from '../shared/createItemForm';
-import { useFindByUsernameQuery, useMeQuery } from "../generated/graphql";
+import { CreateItemForm } from '../components/createItemForm';
+import { useMeQuery } from "../generated/graphql";
+import { UserAccount } from "../components/UserAccount";
+import { MeAccount } from "../components/MeAccount"
+import { CommonUserLayoutBox } from '../shared/CommonUserLayoutBox';
+import { replaceDashWithSpace } from "../utils/convert";
 
 interface ParamProps {
   username: string;
@@ -12,28 +16,20 @@ interface ParamProps {
 export const Account: React.FC<RouteComponentProps> = () => {
 
   const params = useParams<ParamProps>();
-  const { data: meData, loading: meLoading } = useMeQuery();
-  const { data: usernameData, loading: usernameLoading } = useFindByUsernameQuery({
-    variables: {
-      username: params.username
-    }
-  });
 
-  if (meLoading && usernameLoading) {
-    return <span>loading...</span>
+  const { data, loading } = useMeQuery();
+  const newUsername = replaceDashWithSpace(data?.me?.username);
+
+  if (loading) {
+    return <Skeleton />
   }
-  if (!meData?.me) {
+  if (!data?.me) {
     return <Redirect to='/login' />
   }
     return (
         <>
-          { params.username === meData?.me?.username ? <>
-            <Box p={10}
-            display='flex'
-            flexDirection='row'
-            alignItems='center'
-            justifyContent='flex-start'
-            >
+          { params.username === data?.me?.username ? <>
+            <CommonUserLayoutBox>
               <Box
               backgroundColor='gray.800'
               width='100px'
@@ -44,143 +40,33 @@ export const Account: React.FC<RouteComponentProps> = () => {
               </Box>
               <Stack spacing={2}>
                 <Text fontSize='2xl' fontWeight='bold'>
-                  {meData.me.username}
+                  {newUsername}
                 </Text>
                 <Text fontSize='sm' color='gray.500'>
-                  {meData.me.email}
+                  {data.me.email}
                 </Text>
               </Stack>
               
-            </Box>
+            </CommonUserLayoutBox>
             <Box
             px={10}
             display='flex'
+            flexDirection='row'
             >
               <CreateItemForm />
+              <Button ml={3}>Edit profile</Button>
             </Box>
             <Box
             px={10}
             mt={10}
             >
-              <Tabs isLazy colorScheme='blackAlpha'>
-                <TabList>
-                  <Tab>Selling</Tab>
-                  <Tab>Saved</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    {meData.me.items.length === 0 ? <Text>@{meData.me.username} isn't selling anything yet. Check again soon.</Text> : 
-                      <Grid templateColumns='repeat(5, 1fr)' gap={2}>
-                        {meData.me.items.map(x => (
-                          <>
-                            <Box
-                            key={x.id}
-                            >
-                              <Image                      
-                              src={x.imageurl}
-                              width='350px'
-                              height='250px'
-                              objectFit='cover'
-                              />
-                              <Text fontSize='sm' fontWeight='bold'>R{x.price}</Text>
-                            </Box>
-                          </>
-                        ))}
-                      </Grid>
-                    }
-                  </TabPanel>
-                  <TabPanel>
-                    <Text></Text>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
+              <MeAccount data={data} />    
             </Box>
-          </> : ( // user profile
-            <>
-              { usernameData?.getUserByUsername?.username ? <>
-                <Box p={10}
-                display='flex'
-                flexDirection='row'
-                alignItems='center'
-                justifyContent='flex-start'
-                >
-                <Box
-                backgroundColor='gray.800'
-                width='100px'
-                height='100px'
-                borderRadius='50%'
-                mr={5}
-                >
-              </Box>
-                <Stack spacing={2}>
-                  <Text fontSize='2xl' fontWeight='bold'>
-                    {usernameData.getUserByUsername.username}
-                  </Text>
-                  <Text fontSize='sm' color='gray.500'>
-                    {usernameData.getUserByUsername.email}
-                  </Text>
-                </Stack>
-            </Box>
-            <Box
-            px={10}
-            mt={10}
-            >
-              <Tabs isLazy colorScheme='blackAlpha'>
-                  <TabList>
-                    <Tab>Selling</Tab>
-                    <Tab>Saved</Tab>
-                  </TabList>
-                  <TabPanels>
-                    <TabPanel>
-                      {usernameData.getUserByUsername.items.length === 0 ? <Text>@{usernameData.getUserByUsername.username} isn't selling anything yet. Check again soon.</Text> : 
-                        <Grid templateColumns='repeat(5, 1fr)' gap={2}>
-                          {usernameData.getUserByUsername.items.map(x => (
-                            <>
-                              <Box
-                              key={x.id}
-                              >
-                                <Image                      
-                                src={x.imageurl}
-                                width='350px'
-                                objectFit='cover'
-                                height='250px'
-                                />
-                                <Text fontSize='sm' fontWeight='bold'>R{x.price}</Text>
-                              </Box>
-                            </>
-                          ))}
-                        </Grid>
-                      }
-                    </TabPanel>
-                    <TabPanel>
-                      <Text></Text>
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-            </Box>
-            <Box
-            px={10}
-            >
-            </Box>
-              </> : <>
-                    <Box
-                    display='flex'
-                    flexDirection='column'
-                    justifyContent='center'
-                    alignItems='center'
-                    mt='250px'
-                    >
-                      <Text fontWeight='bold' fontSize='xl'>
-                        Sorry, that page does not exist. Please try again.
-                      </Text>
-                      <Text>
-                        404 page not found.
-                      </Text>
-                    </Box>
-                </>
-              }
-            </>
-          )}
+          </> :
+          <React.Fragment>
+            <UserAccount username={params.username} />
+          </React.Fragment>
+          }
         </>
     )
 }

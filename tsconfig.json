@@ -5,7 +5,7 @@
     "module": "esnext",
     "target": "esnext",
     "lib": [
-      "es6",
+      "esnext",
       "dom",
       "esnext.asynciterable",
       "dom.iterable"

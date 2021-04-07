@@ -19,6 +19,13 @@ module.exports = {
   buildOptions: {
     /* ... */
   },
+  /* Need to add an optimizer for prod builds, and also update the snowpack version to v3 */
+  
+  // optimize: {
+  //   minify: true,
+  //   splitting: true,
+  //   bundle: true,
+  // },
   proxy: {
     /* ... */
   },
