@@ -29,11 +29,13 @@ export const Register: React.FC<RouteComponentProps> = ({history}) => {
             render: () => (
                 <Box
                 color="white"
-                bg="#1e1e1e"
+                bg="#b80c09"
                 p={3}
                 borderRadius={8}
                 >
+                    <Text fontSize="sm">
                     {error}
+                    </Text>
                 </Box>
             )
         })

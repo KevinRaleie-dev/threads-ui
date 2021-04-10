@@ -9,43 +9,61 @@ interface ChangePasswordFormProps {
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({displayText}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [email, setEmail] = useState('');
+    const [displayButton, setDisplayButton] = useState<string>('');
+    const [displaySuccess, setDisplaySuccess] = useState<string>('none');
 
     const formik = useFormik({
         initialValues: {
             email: email,
         },
-        onSubmit: () => {
-
+        onSubmit: (values, actions) => {
+            setTimeout(() => {
+                console.log(values);
+    
+                actions.setSubmitting(false)
+                setDisplayButton("none");
+                setDisplaySuccess("");
+    
+                actions.resetForm();
+            }, 3000);
         }
     })
 
     return (
         <Box>
-            <Text _hover={{cursor: "pointer"}} fontSize='sm' opacity={0.7} mt={3} align='center' onClick={onOpen}>
+            <Text _hover={{cursor: "pointer"}} fontSize='sm' opacity={0.7} align='center' onClick={onOpen}>
                 {displayText}
             </Text>
-            <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={true}>
+            <Modal isOpen={isOpen} onClose={() => {
+                setDisplayButton('');
+                setDisplaySuccess('none');
+                onClose();
+                }} closeOnOverlayClick={true}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader bg="#1e1e1e" color="whitesmoke">Password reset</ModalHeader>
-                    <ModalCloseButton color="whitesmoke" />
-                    <ModalBody>
-                        <Text color="gray.400" fontSize="sm" mb={3}>
-                            We'll send a reset link to the email address provided.
-                        </Text>
-                        <form onSubmit={formik.handleSubmit}>
+                    <ModalHeader>Reset Password</ModalHeader>
+                    <ModalCloseButton />
+                    <form onSubmit={formik.handleSubmit}>
+                        <ModalBody>
+                            <Text color="gray.600" fontSize="sm" mb={3}>
+                                We'll send a reset link to the email address provided.
+                            </Text>
                             <Input
                             focusBorderColor="black"
                             type="email"
                             id="email"
                             name={email}
-                            placeholder="Enter an email"
+                            onChange={formik.handleChange}
+                            value={formik.values.email}
+                            placeholder="Enter your email"
                             />
-                        </form>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button variant="outline">Send link</Button>
-                    </ModalFooter>
+                        </ModalBody>
+                        <ModalFooter>
+                        <Button display={displayButton} isLoading={formik.isSubmitting} type="submit" variant="outline">Send link</Button>
+                        <Text display={displaySuccess} fontSize="3xl">👍🏽</Text>
+                        <Text display={displaySuccess} ml={2} fontSize="sm">Reset link sent!</Text>
+                        </ModalFooter>
+                    </form>
                 </ModalContent>
             </Modal>
         </Box>
