@@ -1,9 +1,9 @@
 import React from 'react'
-import { Flex, Box, Spacer, Button, Spinner } from '@chakra-ui/react'
+import { Flex, Box, Spacer, Button, Spinner, Text, Stack } from '@chakra-ui/react'
+import { SearchIcon } from "@chakra-ui/icons"; //swap these out for feather icons 
 import { Link } from 'react-router-dom';
 import { NavMenu } from './NavMenu';
 import { useMeQuery } from '../generated/graphql';
-import { Search } from './Search';
 import { Logo } from './Logo';
 
 export const Nav = () => {
@@ -17,7 +17,7 @@ export const Nav = () => {
             </Link>
         </Box>
             <>
-                { data?.me ? <Search /> : <Spacer /> }
+                <Spacer />
             </>
          {   
             loading ? <Spinner /> 
@@ -29,20 +29,31 @@ export const Nav = () => {
                     display='flex'
                     flexDirection='row'
                     alignItems='center'
-                    justifyContent='space-between'
+                    justifyItems='space-between'
                     >
-                        <NavMenu username={data.me.username} />
+                        <Stack direction={["column", "row"]} spacing={5} align="center" cursor="pointer">
+                            <Link to="/search">
+                                <SearchIcon />
+                            </Link>
+                            <Text fontSize="sm" fontWeight="500">Buy</Text>
+                            <Text fontSize="sm" fontWeight="500">Sell</Text>
+                            <NavMenu username={data.me.username} />
+                        </Stack>
+
                     </Box>
                 ) : (
                     <>
                         { loading ? <Spinner /> : <>
+                                <Link to="/search">
+                                    <SearchIcon />
+                                </Link>
                                 <Link to='/login'>
                                     <Button _hover={{ border: '2px', borderColor: 'black'}} 
                                     colorScheme="teal" 
                                     border='2px' 
                                     variant='outline' 
                                     borderColor='gray.100' 
-                                    color='black' mr="4">
+                                    color='black' mx="4">
                                         Log in         
                                     </Button>
                                 </Link> 
