@@ -8,7 +8,9 @@ import { Account } from './pages/Account';
 import { Nav } from './shared/Nav';
 import { NotFound } from './pages/NotFound';
 import { Browse } from './pages/Browse';
+import { Drag } from './pages/Drag';
 import { useMeQuery } from './generated/graphql';
+import { Search } from './pages/Search';
 
 export const Routes = () => {
     const {data} = useMeQuery()
@@ -26,6 +28,8 @@ export const Routes = () => {
                     { data?.me ? <Redirect to="/browse" /> : <ChangePassword />}
                 </Route>
                 <Route path="/browse" exact component={Browse} />
+                <Route path="/drag-drop" exact component={Drag} />
+                <Route path="/search" exact component={Search} />
                 <Route path="*" exact component={NotFound} />
             </Switch>
         </BrowserRouter>

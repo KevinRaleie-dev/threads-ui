@@ -1,6 +1,6 @@
 import { Box, Text, Container, Input, Stack, Tag } from '@chakra-ui/react';
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import type { RouteComponentProps } from 'react-router-dom';
 import { useFormik } from "formik"
 
@@ -20,16 +20,13 @@ export const Search: React.FC<RouteComponentProps> = ({location}) => {
     const [search, setSearch] = React.useState<string>('');
     const [recentSearches, setRecentSearches] = React.useState<string[]>([]);
 
-
-
-    
     const formik = useFormik({
         initialValues: {
             search: search
         },
         onSubmit: (values, actions) => {
             recentSearches.push(values.search);
-            console.log(values.search)
+            
             actions.setSubmitting(false);
             actions.resetForm();
         }
@@ -68,7 +65,7 @@ export const Search: React.FC<RouteComponentProps> = ({location}) => {
                     py={7}
                     onChange={formik.handleChange}
                     value={formik.values.search}
-                    name={search}
+                    name="search"
                     id="search"
                     focusBorderColor="none" 
                     type="search"
@@ -77,7 +74,7 @@ export const Search: React.FC<RouteComponentProps> = ({location}) => {
                 </form>
             </Container>
             <Box
-            mt={5}
+            my={5}
             display="grid"
             placeItems="center"
             >

@@ -1,31 +1,70 @@
-import { Box, Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import { convertToObject } from '../utils/convert';
+import { useForgotPasswordMutation } from '../generated/graphql';
 
 interface ChangePasswordFormProps {
     displayText: string;
 }
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({displayText}) => {
+    
+    const [forgotPassword] = useForgotPasswordMutation()
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast();
+    
     const [email, setEmail] = useState('');
     const [displayButton, setDisplayButton] = useState<string>('');
     const [displaySuccess, setDisplaySuccess] = useState<string>('none');
+
+    const displayError = useRef('');
+
+    const handleError = (error: string): void => {
+        toast({
+            position: "bottom-left",
+            render: () => (
+                <Box
+                color="white"
+                bg="#b80c09"
+                p={3}
+                borderRadius={8}
+                >
+                    <Text fontSize="sm">
+                        {error}
+                    </Text>
+                </Box>
+            )
+        })
+    }
 
     const formik = useFormik({
         initialValues: {
             email: email,
         },
-        onSubmit: (values, actions) => {
-            setTimeout(() => {
-                console.log(values);
-    
-                actions.setSubmitting(false)
-                setDisplayButton("none");
-                setDisplaySuccess("");
-    
-                actions.resetForm();
-            }, 3000);
+        onSubmit: async ({email}, actions) => {
+            try {
+                const response = await forgotPassword({
+                    variables: {
+                        email
+                    }
+                });
+
+                if (response.data?.forgotPassword.errors) {
+                    const error = convertToObject(response.data.forgotPassword.errors);
+                    actions.setErrors(error);
+                }
+                else if(response.data?.forgotPassword.user) {
+                    actions.setSubmitting(false)
+                    setDisplayButton("none");
+                    setDisplaySuccess("");
+                    actions.resetForm();
+                }
+            } catch (error) {
+                displayError.current = error.message;
+                handleError(displayError.current);
+            }
         }
     })
 
@@ -41,12 +80,12 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({displayTe
                 }} closeOnOverlayClick={true}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Reset Password</ModalHeader>
+                    <ModalHeader>Password Problems?</ModalHeader>
                     <ModalCloseButton />
                     <form onSubmit={formik.handleSubmit}>
                         <ModalBody>
                             <Text color="gray.600" fontSize="sm" mb={3}>
-                                We'll send a reset link to the email address provided.
+                                Enter your email address to receive a link to change your password.
                             </Text>
                             <Input
                             focusBorderColor="black"
@@ -57,11 +96,11 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({displayTe
                             value={formik.values.email}
                             placeholder="Enter your email"
                             />
+                            {formik.errors.email && formik.touched.email ? (<Text fontSize='sm' color="red.400">{formik.errors.email}</Text>) : null}
                         </ModalBody>
                         <ModalFooter>
-                        <Button display={displayButton} isLoading={formik.isSubmitting} type="submit" variant="outline">Send link</Button>
-                        <Text display={displaySuccess} fontSize="3xl">👍🏽</Text>
-                        <Text display={displaySuccess} ml={2} fontSize="sm">Reset link sent!</Text>
+                        <Button isDisabled={formik.values.email === ''} display={displayButton} isLoading={formik.isSubmitting} type="submit" variant="outline">Send link</Button>
+                        <Text display={displaySuccess} ml={2} fontSize="sm" fontWeight="500">Sent 🚀, please check your email</Text>
                         </ModalFooter>
                     </form>
                 </ModalContent>

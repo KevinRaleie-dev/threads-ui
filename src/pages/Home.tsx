@@ -45,6 +45,7 @@ const Home: React.FC<RouteComponentProps> = ({history}) => {
                 </GridItem>
                 <GridItem colStart={4} colEnd={6} h="10">
                     <Image
+                    borderRadius={10}
                     src='https://images.unsplash.com/photo-1607629002474-af96a30346c9?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8YWZyaWNhbiUyMGF0dGlyZXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60'
                     />
                 </GridItem>
@@ -52,6 +53,7 @@ const Home: React.FC<RouteComponentProps> = ({history}) => {
             <Grid templateColumns="repeat(5, 1fr)" gap={1}>
                 <GridItem colSpan={2} h="10" mt='500px'>
                     <Image
+                    borderRadius={10}
                     src='https://images.unsplash.com/photo-1576775068951-d4983d253497?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHN0cmVldCUyMHdlYXJ8ZW58MHwxfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60'
                     />
                 </GridItem>

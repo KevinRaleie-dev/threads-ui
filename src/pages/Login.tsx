@@ -6,7 +6,7 @@ import type { AuthFormProps } from '../interfaces/auth';
 import { useLoginMutation, MeDocument } from '../generated/graphql';
 import { convertToObject } from '../utils/convert';
 import { ChangePasswordForm } from '../components/ChangePasswordForm';
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 export const Login: React.FC<RouteComponentProps> = ({history}) => {
     const [email, setEmail] = useState('');
