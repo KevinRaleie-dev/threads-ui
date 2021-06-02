@@ -5,6 +5,7 @@ import { ErrorModal } from "../shared/ErrorModal";
 import { ErrorLayout } from "../shared/ErrorLayout";
 import { CommonUserLayoutBox } from "../shared/CommonUserLayoutBox";
 import { replaceDashWithSpace } from "../utils/convert";
+import { Helmet } from 'react-helmet-async';
 
 interface UserAccountProps {
     username: string;
@@ -29,6 +30,9 @@ export const UserAccount: React.FC<UserAccountProps> = ({username}) => {
 
     return (
         <React.Fragment>
+            <Helmet>
+                <title>{newUsername} | Threads</title>
+            </Helmet>
             { data?.getUserByUsername?.username ? 
             <>
                 <CommonUserLayoutBox>

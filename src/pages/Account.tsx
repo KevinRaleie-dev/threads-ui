@@ -1,5 +1,5 @@
-import { Box, Stack, Text, Skeleton, Button } from '@chakra-ui/react';
 import React from 'react';
+import { Box, Stack, Text, Skeleton, Button } from '@chakra-ui/react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import { CreateItemForm } from '../components/createItemForm';
@@ -8,6 +8,7 @@ import { UserAccount } from "../components/UserAccount";
 import { MeAccount } from "../components/MeAccount"
 import { CommonUserLayoutBox } from '../shared/CommonUserLayoutBox';
 import { replaceDashWithSpace } from "../utils/convert";
+import { Helmet } from 'react-helmet-async'
 
 interface ParamProps {
   username: string;
@@ -28,6 +29,9 @@ export const Account: React.FC<RouteComponentProps> = () => {
   }
     return (
         <>
+          <Helmet>
+            <title>{newUsername} | Threads</title>
+          </Helmet>
           { params.username === data?.me?.username ? <>
             <CommonUserLayoutBox>
               <Box
@@ -46,7 +50,6 @@ export const Account: React.FC<RouteComponentProps> = () => {
                   {data.me.email}
                 </Text>
               </Stack>
-              
             </CommonUserLayoutBox>
             <Box
             px={10}
