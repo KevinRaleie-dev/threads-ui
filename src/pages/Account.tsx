@@ -30,7 +30,7 @@ export const Account: React.FC<RouteComponentProps> = () => {
     return (
         <>
           <Helmet>
-            <title>{newUsername} | Threads</title>
+            <title>{`${newUsername ?? params.username} | Threads`}</title>
           </Helmet>
           { params.username === data?.me?.username ? <>
             <CommonUserLayoutBox>

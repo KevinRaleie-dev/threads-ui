@@ -31,7 +31,7 @@ export const UserAccount: React.FC<UserAccountProps> = ({username}) => {
     return (
         <React.Fragment>
             <Helmet>
-                <title>{newUsername} | Threads</title>
+                <title>{`${newUsername} | Threads`}</title>
             </Helmet>
             { data?.getUserByUsername?.username ? 
             <>
